@@ -5,7 +5,7 @@
 
 ## Table of contents
 * [Project description](#Project-description)
-* [Future set ](#Future-set)
+* [feature set ](#feature-set)
 * [Progress ](#current-progress-of-the-project.)
 * [Status](#Status)
 
@@ -14,7 +14,7 @@
 Discord bot for remote management and statistics collection bot for discord ,Technicolor modems and PfSense.
 
 
-## Future set 
+## feature set 
 The target future set will be the following 
 * Display on discord message xDSL statistics , 
 * on request display graffs of these statistics
