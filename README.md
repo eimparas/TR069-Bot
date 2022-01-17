@@ -17,7 +17,7 @@ Discord bot for remote management and statistics collection bot for discord ,Tec
 ## Future set 
 The target future set will be the following 
 * Display on discord message xDSL statistics , 
-* on request display graffs of this statistics
+* on request display graffs of these statistics
 * Allert Network admin for any issues (high error rates , CGNAT , etc ) 
 * and more...
 
