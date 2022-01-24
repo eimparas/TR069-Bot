@@ -26,6 +26,7 @@ The target future set will be the following
 * PfSense flaux api & Python works 
 * parsing stats from TG789v V3 via ssh works 
 * Discord messaging works via `NextCord`
+
 TBD:
 * Scaling rrd graf images 
 * Finishing Tg789v V3 bot for displaying stats like CRC/FEC/ sync/Attainable on request,allarms on high error counts, CMD for restaring modem sync . 
