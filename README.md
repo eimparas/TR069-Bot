@@ -29,8 +29,11 @@ The target future set will be the following
 
 TBD:
 * Scaling rrd graph images 
-* Finishing Tg789v V3 bot for displaying stats like CRC/FEC/ sync/Attainable on request,alarms on high error counts, CMD for restaring modem sync . 
-      
+* Finishing Tg789v V3 bot for displaying stats like CRC/FEC/ sync/Attainable on request, 
+ 
+-alarms on high error counts, Sync/Desync events
+
+-CMD for restaring modem sync.
 
 
 
