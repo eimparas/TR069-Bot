@@ -40,8 +40,8 @@ TBD:
 * onRequest: WAN_IP, Uptime 
 * Alarms on high error counts
 * CMD for restarting modem sync
-* Displaying the RRD graphs, On discord. Consider a Webpage like smokePing? 
-
+* Displaying the RRD graphs, On discord
+* Finalize The grafana Dashboard.
 
 ## Status
 Project is: _in progress_
@@ -52,7 +52,7 @@ WORKING:
 * Saving of Data (RRD)
 * onRequest: VDSL_Stats, CRC/FEC_Counts,
 * Alarm on Sync/Desync events
-* CMD: Modem reboot with the `reboot` command. (_implemented but untested_)
+* CMD: Modem reboot with the `reboot` command. 
 
 NOT WORKING: 
-* RRD graphs scaling
+* RRD graphs scaling 
