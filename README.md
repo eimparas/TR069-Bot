@@ -20,6 +20,7 @@ The target future set will be the following
 * Alert Network admin for any issues:
 - high error rates, CGNAT  
 - interface status changes
+- Display data on Grafana
 
 * How CRC /FEC errors are displayed on the RRD graph. 
 A) standard, rolling graph, which shows the errors over time 
@@ -53,6 +54,10 @@ WORKING:
 * onRequest: VDSL_Stats, CRC/FEC_Counts,
 * Alarm on Sync/Desync events
 * CMD: Modem reboot with the `reboot` command. 
-
-NOT WORKING: 
-* RRD graphs scaling  
+## ScreenShots: 
+* Grafana DashBoard: 
+ ![Grafana](https://github.com/finos2/TR069-Bot/blob/main/IMG/DashBoard.png?raw=true)
+ 
+ * Status Discord Message: 
+ 
+ ![Status](https://github.com/finos2/TR069-Bot/blob/main/IMG/DiscordStatus.png?raw=true)
