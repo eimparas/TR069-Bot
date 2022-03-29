@@ -783,7 +783,7 @@
             "seriesBy": "last"
           },
           "custom": {
-            "axisLabel": "POWER (dB)",
+            "axisLabel": "OUTPUT POWER (dBm)",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
