@@ -1,7 +1,7 @@
-HOST = "1YOUR-HOSTNAME"
-USERNAME = "YOUR-USERNAME"
-PASSWORD = "YOUR-PASSWORD"
-BOT_TOKEN = "YOUR-BOT-TOKEN"
-ROUTER_BRAND = "YOUR-ROUTER-BRAND" #Please set either "ZTE" or "Technicolor"
-ADMIN_ID = 123456 #replace with your user id
-CHANNEL_ID = 0000000 #replace with your channel id
+HOST = "192.168.1.1"
+USERNAME = "root"
+PASSWORD = "root"
+BOT_TOKEN = " "#follow Discords guidence on how to make a bot and get the API key.
+ADMIN_ID = 0000#Get your IDs by seting Discord in dev mode and right clicking on the User.
+CHANNEL_ID = 0000#Get your IDs by seting Discord in dev mode and right clicking on the channel.
+INFLUX_DB_NAME = "modem"
