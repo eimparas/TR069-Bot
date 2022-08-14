@@ -1,5 +1,5 @@
 from influxdb import InfluxDBClient
-from router import getRouter
+from modem import getRouter
 
 modem = getRouter()
 client = InfluxDBClient(host="localhost", port=8086, database="modem")
@@ -10,19 +10,17 @@ FIELDS = ["FECUP", "FECDOWN", "CRCUP", "CRCDOWN", "SNRUP", "SNRDOWN","ATTUP", "A
 
 modem.connect()
 modem.updateStats()
-data = [modem.stats[0][1], modem.stats[0][0], modem.stats[1][1], modem.stats[1][0],
+data = [modem.fecUP, modem.fecDOWN, modem.crcUP, modem.crcDOWN,
         modem.snrUP, modem.snrDOWN,
         modem.attenuationUP, modem.attenuationDOWN,
         modem.powerUP, modem.powerDOWN,
         modem.attainableUP, modem.attainableDOWN,
         modem.syncUP, modem.syncDOWN]
 insertionString = "measurements "
-
 for i in range(len(FIELDS)):
     insertionString = insertionString +"{}={}".format(FIELDS[i], data[i])
     if i != len(FIELDS)-1:
         insertionString = insertionString +","
-
 client.write_points([insertionString], protocol="line")
 modem.disconnect()
 print("Influx database got successfully updated!")
