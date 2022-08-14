@@ -1,12 +1,9 @@
 import nextcord, config
 from nextcord.ext import commands, tasks
 from nextcord.ui import View, button, Button
-from modem import TechnicolorModem
+from modem import getRouter
 from datetime import datetime
 
-HOST = config.HOST
-USERNAME = config.USERNAME
-PASSWORD = config.PASSWORD
 BOT_TOKEN = config.BOT_TOKEN
 ADMIN_ID = config.ADMIN_ID
 CHANNEL_ID = config.CHANNEL_ID
@@ -35,7 +32,7 @@ async def hello_world(context,*,msg):
 @client.command()
 async def status(context, edit=False):
     global statusMessage
-    modem = TechnicolorModem(HOST, USERNAME, PASSWORD)
+    modem = getRouter()
     modem.connect()
     modem.updateStats()
     modem.disconnect()
@@ -57,14 +54,14 @@ async def status(context, edit=False):
 
 @client.command()
 async def reboot(context):
-    modem = TechnicolorModem(HOST, USERNAME, PASSWORD)
+    modem = getRouter()
     modem.connect()
     modem.reboot()
     modem.disconnect()
 
 @client.command()
 async def disconnectline(context):
-    modem = TechnicolorModem(HOST, USERNAME, PASSWORD)
+    modem = getRouter()
     modem.connect()
     await context.channel.send("OK!")
     modem.disconnectLine()
@@ -72,7 +69,7 @@ async def disconnectline(context):
 
 @client.command()
 async def connectline(context):
-    modem = TechnicolorModem(HOST, USERNAME, PASSWORD)
+    modem = getRouter()
     modem.connect()
     await context.channel.send("OK!")
     modem.connectLine()
@@ -83,7 +80,7 @@ async def check():
     await client.wait_until_ready()
     print("LINE STATE CHECK")
     global modemStatus
-    modem = TechnicolorModem(HOST, USERNAME, PASSWORD)
+    modem = getRouter()
     modem.connect()
     modem.updateLineState()
     modem.disconnect()
@@ -117,6 +114,6 @@ class buttonView(View):
             await interaction.message.edit(embed=embed, view=self)
         except Exception as e:
             print(e)
-
+            
 check.start()
 client.run(BOT_TOKEN)

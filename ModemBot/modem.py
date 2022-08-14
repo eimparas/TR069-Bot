@@ -1,5 +1,4 @@
-from sys import stderr, stdout
-import paramiko, re, hashlib, requests, traceback
+import paramiko, re, hashlib, requests, traceback, config
 from bs4 import BeautifulSoup
 from datetime import datetime
 
@@ -254,3 +253,12 @@ class ZTEModem(Modem):
     def showStats(self):
         super().showStats()
         print("IP ADDRESS: ", self.IPAddress)
+
+def getRouter():
+    router = None
+    brand = config.MODEM_BRAND.lower()
+    if brand.__contains__("zte"):
+        router = ZTEModem(config.HOST, config.USERNAME, config.PASSWORD)
+    elif brand.__contains__("technicolor"):
+        router = TechnicolorModem(config.HOST, config.USERNAME, config.PASSWORD)
+    return router
