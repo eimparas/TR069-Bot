@@ -5,10 +5,9 @@
 
 ## Table of contents
 * [Project description ](#Project-description)
-* [Connection Diagram ](#PConnection-Diagram)
-* [feature set ](#feature-set)
-* [Progress ](#current-progress-of-the-project.)
-* [Status](#Status)
+* [Connection Diagram ](#Connection-Diagram)
+* [feature set ](#Fetures)
+* [Status](#status)
 
 ## Project description 
 Discord bot for remote management and statistics collection bot for discord, Technicolor modems and PfSense. 
@@ -18,9 +17,9 @@ Discord bot for remote management and statistics collection bot for discord, Tec
 
 ## Connection Diagram
 
-_TO_BE_ADDED_
+ ![Network Diagram](https://github.com/finos2/TR069-Bot/blob/main/IMG/network_Diagram.jpg?raw=true)
 
-## Feature set 
+## Fetures
 > ModemBot: 
 * Display on discord message xDSL statistics 
 * On request display graphs of these statistics (replaced with grafana)
@@ -48,23 +47,7 @@ TBD:
 * Finalize The grafana Dashboard.
 
 ## Status
-Project is: _in progress_
-
-# WORKING:
-
-> For ModemBot: 
-
-* Parsing of data (SSH) 
-* Saving of Data (RRD)
-* On Request: VDSL_Stats, CRC/FEC_Counts,
-* Alarm on Sync/Desync events
-* CMD: Modem reboot with the `reboot` command. 
-
-> For PfsenseBot: 
-* Wan interface Ip change alerts 
-* CGNAT alerts (when the isp plays naughty)
-* Interface Stats (RTT, Packet loss, etc)
-
+Project is: Finished , ModemBot working, PfsenseBot is buggy and will require a API change
 
 
 ## Screenshots: 
