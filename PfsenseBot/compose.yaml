@@ -1,0 +1,11 @@
+---
+version: "2.1"
+services:
+  pfbot:
+    image:  pfbot:latest
+    container_name: pfsensebot
+    environment:
+      - TZ=Europe/Athens
+    volumes:
+      - /DockerData/pfsensebot:/PfsenseBot/cmkdonfig
+    restart: unless-stopped
