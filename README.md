@@ -47,7 +47,7 @@ TBD:
 * Finalize The grafana Dashboard.
 
 ## Status
-Project is: Finished , ModemBot working, PfsenseBot is buggy and will require a API change
+Project is: Finished , ModemBot working, PfsenseBot is updated to a newer api that fixed issues we where having with fauxapi. 
 
 
 ## Screenshots: 
