@@ -35,15 +35,12 @@ Commands:
 - interface status changes (if PPP had Dropped and returned, this will ping the admin)
 - Display data on Grafana
 
-## Current progress of the project. 
-* ModemBot deployed on final setup and long-term testing started 
-* Grafana dashboard has to be finalized 
-* PfsenseBot has to be deployed on a docker container. 
+## Current progress of the project. : Completed
+
+* the project is "out" of beta , we have been using it for over a year doing the nececery bugfixes as nececery . It will continue to get support , and perhaps new fetures 
 
 TBD:
-* Alerts: CRC alerts (lots in a small time), Desync, Resync.
-* On Request: WAN_IP, Uptime 
-* CMD for restarting modem sync
+* Alerts: Line Error Alerts (lots in a small time) 
 * Finalize The grafana Dashboard.
 
 ## Status
