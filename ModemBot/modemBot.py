@@ -55,7 +55,7 @@ else:
 def getCPE():
     _modem = None
     brand = modem_cpe_model.lower()
-    if brand.__contains__("zte"):
+    if brand.__contains__("zteh267a"):
         _modem = modem.ZTEh267a(modem_host, modem_username, modem_password)
     elif brand.__contains__("technicolor"):
         _modem = modem.TechnicolorModem(modem_host, modem_username, modem_password)
