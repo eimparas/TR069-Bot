@@ -1,17 +1,79 @@
-import nextcord, config
+import nextcord
+import os
+import toml
+import modem
+
 from nextcord.ext import commands, tasks
 from nextcord.ui import View, button, Button
-from modem import getRouter
 from datetime import datetime
 
-BOT_TOKEN = config.BOT_TOKEN
-ADMIN_ID = config.ADMIN_ID
-CHANNEL_ID = config.CHANNEL_ID
+config_filename = 'config.toml'
+config_data = {
+    'Modem_config': {
+        'host': '',
+        'username': '',
+        'password': '',
+        'CpeModel': ''
+    },
+    'Discord_config': {
+        'Api key': '',
+        'Admin_ID': '',
+        'Channel_ID': ''
+    },
+    'Database Config': {
+        'DB_name': ''
+    }
+}
+
+# Check if the config file exists
+if os.path.isfile(config_filename):
+    # Load the config data from the file
+    with open(config_filename, 'r') as f:
+        config = toml.load(f)
+
+    # Retrieve the information from the config data
+    modem_host = config['Modem_config']['host']
+    modem_username = config['Modem_config']['username']
+    modem_password = config['Modem_config']['password']
+    modem_cpe_model = config['Modem_config']['CpeModel']
+    
+    discord_api_key = config['Discord_config']['Api key']
+    discord_admin_id = config['Discord_config']['Admin_ID']
+    discord_channel_id = config['Discord_config']['Channel_ID']
+    
+    db_name = config['Database Config']['DB_name']
+
+else:
+    # Create a config file with placeholders and exit with an error message
+    with open(config_filename, 'w') as f:
+        toml.dump(config_data, f)
+
+    print(f'Error: {config_filename} not found. A config file with placeholders has been created.')
+    exit(1)
+
+
+def getCPE():
+    _modem = None
+    brand = modem_cpe_model.lower()
+    if brand.__contains__("zte"):
+        _modem = modem.ZTEh267a(modem_host, modem_username, modem_password)
+    elif brand.__contains__("technicolor"):
+        _modem = modem.TechnicolorModem(modem_host, modem_username, modem_password)
+    elif brand.__contains__("openwrt"):
+        _modem = modem.OpenWRT(modem_host, modem_username, modem_password)
+    return _modem
+
+
+BOT_TOKEN = discord_api_key
+ADMIN_ID = discord_admin_id
+CHANNEL_ID = discord_channel_id
 
 
 statusMessage = None
 modemStatus = None
-client = commands.Bot(command_prefix="!", intents=nextcord.Intents().default())
+intents = nextcord.Intents.default()
+intents.message_content = True
+client = commands.Bot(command_prefix="!", intents=intents)
 client.remove_command("help")
 
 
@@ -32,7 +94,7 @@ async def hello_world(context,*,msg):
 @client.command()
 async def status(context, edit=False):
     global statusMessage
-    modem = getRouter()
+    modem = getCPE()
     modem.connect()
     modem.updateStats()
     modem.disconnect()
@@ -54,14 +116,14 @@ async def status(context, edit=False):
 
 @client.command()
 async def reboot(context):
-    modem = getRouter()
+    modem = getCPE()
     modem.connect()
     modem.reboot()
     modem.disconnect()
 
 @client.command()
 async def disconnectline(context):
-    modem = getRouter()
+    modem = getCPE()
     modem.connect()
     await context.channel.send("OK!")
     modem.disconnectLine()
@@ -69,7 +131,7 @@ async def disconnectline(context):
 
 @client.command()
 async def connectline(context):
-    modem = getRouter()
+    modem = getCPE()
     modem.connect()
     await context.channel.send("OK!")
     modem.connectLine()
@@ -80,7 +142,7 @@ async def check():
     await client.wait_until_ready()
     print("LINE STATE CHECK")
     global modemStatus
-    modem = getRouter()
+    modem = getCPE()
     modem.connect()
     modem.updateLineState()
     modem.disconnect()
@@ -114,6 +176,6 @@ class buttonView(View):
             await interaction.message.edit(embed=embed, view=self)
         except Exception as e:
             print(e)
-            
+
 check.start()
 client.run(BOT_TOKEN)

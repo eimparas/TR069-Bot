@@ -1,4 +1,4 @@
-* `!status` : Gets every basic parameter of the DSL line.
-* `!connectLine` : **Sets the line ready to be resynced ,retrained**
-* `!disconnectline` :**Sets the xDSL modem State as low power == line disconnection**
-* `!reboot` :!**REBOOTS THE MODEM**!
+* `!status` : Gets every basic parameter of the DSL line. 
+* `!disconnectline` DeSyncs the xDSL line ,While not reseting the FEC/CRC counters
+* `!connectline` Syncs the xDSL line , useful when restoring connection.
+* `!reboot` :!!!!!!**REBOOTS THE MODEM**!!!!!!

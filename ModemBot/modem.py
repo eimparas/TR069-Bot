@@ -1,6 +1,8 @@
-import paramiko, re, hashlib, requests, traceback, config
+from sys import stderr, stdout
+import paramiko, re, hashlib, requests, traceback
 from bs4 import BeautifulSoup
 from datetime import datetime
+import json
 
 class Modem():
 
@@ -22,12 +24,6 @@ class Modem():
         self.isOnline = True
     
     def fetchNums(self,string, integer):
-        #if integer:
-        #    outlist = [int(s) for s in re.findall("\d+",string)]
-        #else:
-        #    outlist = [float(s) for s in re.findall("[+-]?[0-9]+\.[0-9]+",string)]
-        #    if len(outlist) == 0:
-        #        self.fetchNums(string, True) #no match, so number is an integer
         return [float(s) for s in re.findall("[+-]?[0-9]+\.?[0-9]*",string)]
     
     def connect(self):
@@ -71,7 +67,7 @@ class TechnicolorModem(Modem):
             "dsl_fec_down":"sys.class.xdsl.@line0.DownstreamFECTotal",
             "dsl_crc_up":"sys.class.xdsl.@line0.UpstreamCRCTotal",
             "dsl_crc_down":"sys.class.xdsl.@line0.DownstreamCRCTotal",
-        }
+        }# Transformer Commands
     
     def connect(self):
         print("SSH CONNECTING " + self.HOST)
@@ -90,6 +86,7 @@ class TechnicolorModem(Modem):
     def disconnect(self):
         if self.client is not None:
             self.client.close()
+
     def getStats(self, cmd):
         if self.client is not None:
             stdin, stdout, stderr = self.client.exec_command("transformer-cli get " + self.COMMANDS[cmd])
@@ -150,7 +147,7 @@ class TechnicolorModem(Modem):
     def showStats(self):
         super().showStats() 
 
-class ZTEModem(Modem):
+class ZTEh267a(Modem):
     def __init__(self, HOST, USERNAME, PASSWORD):
         super().__init__()
         self.IPAddress = ""
@@ -159,8 +156,6 @@ class ZTEModem(Modem):
         self.PASSWORD = PASSWORD
 
     def parseData(self, source):
-        #print("--------------------------------------------------------------------------------------------------------")
-        #soup = BeautifulSoup(source, "lxml")
         labels = source.find_all("paraname")
         values = source.find_all("paravalue")
         #This implementation is bad, I know
@@ -254,11 +249,107 @@ class ZTEModem(Modem):
         super().showStats()
         print("IP ADDRESS: ", self.IPAddress)
 
-def getRouter():
-    router = None
-    brand = config.MODEM_BRAND.lower()
-    if brand.__contains__("zte"):
-        router = ZTEModem(config.HOST, config.USERNAME, config.PASSWORD)
-    elif brand.__contains__("technicolor"):
-        router = TechnicolorModem(config.HOST, config.USERNAME, config.PASSWORD)
-    return router
+class OpenWRT(Modem):
+    def __init__(self, HOST, USERNAME, PASSWORD):
+        super().__init__()
+        self.HOST = HOST
+        self.USERNAME = USERNAME
+        self.PASSWORD = PASSWORD
+        
+    ## SSH connection stuff
+    def connect(self):
+        print("SSH CONNECTING " + self.HOST)
+        self.client = paramiko.SSHClient()
+        try:
+            self.client.load_host_keys("host_key.txt")
+            self.client.connect(self.HOST,username=self.USERNAME, password=self.PASSWORD)
+        except FileNotFoundError:
+            print("Key file not found, saving current")
+            with open("host_key.txt", "w") as f:
+                pass
+            self.client.set_missing_host_key_policy(paramiko.client.AutoAddPolicy())
+            self.client.connect(self.HOST,username=self.USERNAME, password=self.PASSWORD)
+            self.client.save_host_keys("host_key.txt")
+    
+    def disconnect(self):
+        if self.client is not None:
+            self.client.close()
+    
+    def getStats(self, cmd):
+        if self.client is not None:
+            stdin, stdout, stderr = self.client.exec_command("ubus call dsl metrics")
+            return stdout.read().decode('utf-8')
+
+    def updateStats(self):
+        dbusReturn = self.getStats(self)
+        parsed_payload=json.loads(dbusReturn)
+
+        if parsed_payload['power_state']== "L0 - Synchronized":
+            self.isOnline = True
+        else:
+            self.isOnline = False
+        
+        try:
+            if parsed_payload['power_state']== "L0 - Synchronized":
+
+                self.attainableUP = (parsed_payload['upstream']['attndr'])/1000 #bps to kbps
+                self.attainableDOWN = (parsed_payload['downstream']['attndr'])/1000
+                self.syncUP = (parsed_payload['upstream']['data_rate'])/1000
+                self.syncDOWN = (parsed_payload['downstream']['data_rate'])/1000
+                self.snrUP = (parsed_payload['upstream']['snr'])/1000
+                self.snrDOWN = parsed_payload['downstream']['snr']
+                self.attenuationUP = parsed_payload['upstream']['latn']
+                self.attenuationDOWN = parsed_payload['downstream']['latn']
+                self.powerUP = parsed_payload['upstream']['actatp']
+                self.powerDOWN = parsed_payload['downstream']['actatp']
+                self.crcUP = parsed_payload['errors']['far']['crc_p']
+                self.crcDOWN = parsed_payload['errors']['near']['crc_p']
+                self.fecUP = parsed_payload['errors']['far']['fecs']
+                self.fecDOWN = parsed_payload['errors']['near']['fecs']
+        except IndexError as i:
+            print("ERROR: ", i)
+            timestr = datetime.now().strftime("%m-%d-%Y_%H.%M.%S")
+            with open(timestr+".txt", "a") as file:
+                file.write(traceback.format_exc()+"\n")
+                print("==============================DATA=================================")
+                file.write("==============================DATA=================================\n")
+                values = self.COMMANDS.keys()
+                for value in values:
+                    print(value, self.getStats(value))
+                    file.write(value+"\t"+self.getStats(value)+"\n")
+                print("==============================END DATA=============================")
+                file.write("==============================END DATA============================="+"\n")
+
+    def updateLineState(self):
+        dbusReturn = self.getStats(self)
+        parsed_payload=json.loads(dbusReturn)
+
+        if parsed_payload['power_state']== "L0 - Synchronized":
+            self.isOnline = True
+        else:
+            self.isOnline = False
+            
+    def reboot(self):
+        if self.client is not None:
+            self.client.exec_command("reboot")
+    
+    def disconnectLine(self):
+        raise NotImplementedError
+        if self.client is not None:
+            self.client.exec_command("xdslctl connection --down")
+
+    def connectLine(self):
+        raise NotImplementedError
+        if self.client is not None:
+            self.client.exec_command("xdslctl connection --up")
+
+    def showStats(self):
+        super().showStats()
+
+
+class ZTEh1600(Modem):
+    def __init__(self, HOST, USERNAME, PASSWORD):
+        super().__init__()
+        self.HOST = HOST
+        self.USERNAME = USERNAME
+        self.PASSWORD = PASSWORD
