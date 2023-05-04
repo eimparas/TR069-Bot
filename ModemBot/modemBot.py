@@ -10,18 +10,15 @@ from datetime import datetime
 config_filename = 'config.toml'
 config_data = {
     'Modem_config': {
-        'host': '',
-        'username': '',
-        'password': '',
+        'Host': '',
+        'Username': '',
+        'Password': '',
         'CpeModel': ''
     },
     'Discord_config': {
-        'Api key': '',
+        'Api_key': '',
         'Admin_ID': '',
         'Channel_ID': ''
-    },
-    'Database Config': {
-        'DB_name': ''
     }
 }
 
@@ -32,16 +29,14 @@ if os.path.isfile(config_filename):
         config = toml.load(f)
 
     # Retrieve the information from the config data
-    modem_host = config['Modem_config']['host']
-    modem_username = config['Modem_config']['username']
-    modem_password = config['Modem_config']['password']
+    modem_host = config['Modem_config']['Host']
+    modem_username = config['Modem_config']['Username']
+    modem_password = config['Modem_config']['Password']
     modem_cpe_model = config['Modem_config']['CpeModel']
     
-    discord_api_key = config['Discord_config']['Api key']
+    discord_api_key = config['Discord_config']['Api_key']
     discord_admin_id = config['Discord_config']['Admin_ID']
     discord_channel_id = config['Discord_config']['Channel_ID']
-    
-    db_name = config['Database Config']['DB_name']
 
 else:
     # Create a config file with placeholders and exit with an error message

@@ -1,13 +1,10 @@
 [Modem_config]
-host = ""
-username = ""
-password = ""
+Host = ""
+Username = ""
+Password = ""
 CpeModel = "" # use "technicolor, "zteh267a" , "openwrt" to select CPE
 
 [Discord_config]
-"Api key" = "" #Consult Discord Documentation on how to obtain the API key for a bot
+Api_key = ""
 Admin_ID = ""
 Channel_ID = ""
-
-["Database Config"]
-DB_name = ""
