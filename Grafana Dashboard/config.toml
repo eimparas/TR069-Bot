@@ -1,0 +1,17 @@
+[Modem_config]
+Host = ""
+Username = ""
+Password = ""
+CpeModel = ""
+
+[Discord_config]
+Api_key = ""
+Admin_ID = ""
+Channel_ID = ""
+
+[Database_Config]
+DB_Host = ""
+DB_Port = ""
+DB_Token = ""
+DB_ORG = ""
+DB_Bucket = ""
