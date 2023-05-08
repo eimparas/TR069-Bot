@@ -147,15 +147,14 @@ class TechnicolorModem(Modem):
     def showStats(self):
         super().showStats() 
 
-class ZTEh267a(Modem):
-    def __init__(self, HOST, USERNAME, PASSWORD):
+class ZTEModem(Modem):
+    def __init__(self,HOST,USERNAME,PASSWORD):
         super().__init__()
-        self.IPAddress = ""
         self.HOST = HOST
         self.USERNAME = USERNAME
         self.PASSWORD = PASSWORD
-
-    def parseData(self, source):
+    
+    def parseData(self, source: BeautifulSoup):
         labels = source.find_all("paraname")
         values = source.find_all("paravalue")
         #This implementation is bad, I know
@@ -167,11 +166,11 @@ class ZTEh267a(Modem):
                 continue
 
             if label == "Fec_errors":
-                self.stats[0][0] = int(values[i].text)
+                self.fecDOWN = int(values[i].text)
                 continue
 
             if label == "Atuc_fec_errors":
-                self.stats[0][1] = int(values[i].text)
+                self.fecUP = int(values[i].text)
                 continue
 
             if label == "Upstream_max_rate":
@@ -191,11 +190,11 @@ class ZTEh267a(Modem):
                 continue
 
             if label == "UpCrc_errors":
-                self.stats[1][1] = int(values[i].text)
+                self.crcUP = int(values[i].text)
                 continue
 
             if label == "DownCrc_errors":
-                self.stats[1][0] = int(values[i].text)
+                self.crcDOWN = int(values[i].text)
                 continue
 
             if label == "Upstream_attenuation":
@@ -221,6 +220,11 @@ class ZTEh267a(Modem):
             if label == "Downstream_noise_margin":
                 self.snrDOWN = float(values[i].text)/10
                 continue
+
+class ZTEh267a(ZTEModem):
+    def __init__(self, HOST, USERNAME, PASSWORD):
+        super().__init__(HOST,USERNAME,PASSWORD)
+        self.IPAddress = ""
     
     def updateStats(self):
         h = hashlib.new("sha256")
@@ -229,11 +233,9 @@ class ZTEh267a(Modem):
         randomnumber = session.get("http://{}/function_module/login_module/login_page/logintoken_lua.lua".format(self.HOST))
         soup = BeautifulSoup(randomnumber.content, "lxml")
         passnumber = soup.find("ajax_response_xml_root").text
-        #print(randomnumber.content)
         h.update((("{}"+passnumber).format(self.PASSWORD)).encode())
         password = h.hexdigest()
-        #print(password)
-        payload={"Username":"admin", "Password":password, "action":"login"}
+        payload={"Username":self.USERNAME, "Password":password, "action":"login"}
         r = session.post("http://{}".format(self.HOST), data=payload, allow_redirects=False)
         r = session.get("http://{}".format(self.HOST))
         print(r.status_code)
@@ -248,6 +250,31 @@ class ZTEh267a(Modem):
     def showStats(self):
         super().showStats()
         print("IP ADDRESS: ", self.IPAddress)
+
+class ZTEh1600(ZTEModem):
+    def __init__(self, HOST, USERNAME, PASSWORD):
+        super().__init__(HOST,USERNAME,PASSWORD)
+    
+    def updateStats(self):
+        with requests.Session() as session:
+            r = session.get(f"http://{self.HOST}/?_type=loginData&_tag=login_entry").content.decode()
+            sessionToken = json.loads(r)["sess_token"]
+            xml = session.get(f"http://{self.HOST}/?_type=loginData&_tag=login_token&_={int(datetime.now().timestamp()*1000)}").content.decode()
+            num = re.findall("\d+", xml)[0]
+            #print(sessionToken, num)
+            password = hashlib.sha256((self.PASSWORD+num).encode()).hexdigest()
+            authorizationData = {"action":"login","Username":self.USERNAME,"Password":password, "_sessionTOKEN":sessionToken}
+            response = session.post(f"http://{self.HOST}/?_type=loginData&_tag=login_entry",data=authorizationData).content.decode()
+            if json.loads(response)["login_need_refresh"] : 
+                session.get(f"http://{self.HOST}/")
+                session.get(f"http://{self.HOST}/?_type=menuView&_tag=dslWanStatus&Menu3Location=0&_={int(datetime.now().timestamp()*1000)}")
+                response = session.get(f"http://{self.HOST}/?_type=menuData&_tag=dsl_interface_status_lua.lua&_={int(datetime.now().timestamp()*1000)}").content.decode()
+                dataXML = BeautifulSoup(response,"lxml")
+                self.parseData(dataXML.find("instance"))
+                #print(session.cookies.get_dict()) #for debugging
+            else:
+                raise Exception("Could not log in to modem!")
+
 
 class OpenWRT(Modem):
     def __init__(self, HOST, USERNAME, PASSWORD):
@@ -343,13 +370,3 @@ class OpenWRT(Modem):
         if self.client is not None:
             self.client.exec_command("xdslctl connection --up")
 
-    def showStats(self):
-        super().showStats()
-
-
-class ZTEh1600(Modem):
-    def __init__(self, HOST, USERNAME, PASSWORD):
-        super().__init__()
-        self.HOST = HOST
-        self.USERNAME = USERNAME
-        self.PASSWORD = PASSWORD
