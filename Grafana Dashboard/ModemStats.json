@@ -21,16 +21,19 @@
       }
     ]
   },
-  "description": "First grafana dashboard :D",
+  "description": "VDSL line stats ",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 5,
+  "id": 1,
   "links": [],
   "liveNow": false,
   "panels": [
     {
-      "datasource": {},
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DataSource}"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -55,15 +58,12 @@
                 "value": 25
               },
               {
-                "color": "semi-dark-green",
+                "color": "green",
                 "value": 55
-              },
-              {
-                "color": "#0d6c00",
-                "value": 85
               }
             ]
-          }
+          },
+          "unit": "Kbits"
         },
         "overrides": []
       },
@@ -75,6 +75,9 @@
       },
       "id": 16,
       "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -83,21 +86,20 @@
           "fields": "/^MAXDOWN measurements$/",
           "values": false
         },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true
+        "textMode": "auto"
       },
-      "pluginVersion": "9.4.2",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "NMcm2ks7z"
+            "uid": "${DataSource}"
           },
           "groupBy": [],
           "measurement": "measurements",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"kouvas\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"MAXDOWN\"\n  )",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"MAXDOWN\"\n  )",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -115,14 +117,14 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "NMcm2ks7z"
+            "uid": "${DataSource}"
           },
           "groupBy": [],
           "hide": false,
           "measurement": "measurements",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"kouvas\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"ATTAINABLEDOWN\"\n  )",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"ATTAINABLEDOWN\"\n  )",
           "refId": "B",
           "resultFormat": "time_series",
           "select": [
@@ -138,7 +140,7 @@
           "tags": []
         }
       ],
-      "title": "Downstream speed (kbps)",
+      "title": "DSL Sync Down",
       "transformations": [
         {
           "id": "calculateField",
@@ -157,13 +159,10 @@
           }
         }
       ],
-      "type": "gauge"
+      "type": "stat"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "MHfs--74k"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -171,22 +170,27 @@
           },
           "mappings": [],
           "thresholds": {
-            "mode": "percentage",
+            "mode": "absolute",
             "steps": [
               {
                 "color": "dark-red",
                 "value": null
               },
               {
-                "color": "#EAB839",
-                "value": 10
+                "color": "orange",
+                "value": 5
               },
               {
-                "color": "dark-green",
-                "value": 14
+                "color": "light-yellow",
+                "value": 7.5
+              },
+              {
+                "color": "green",
+                "value": 9
               }
             ]
-          }
+          },
+          "unit": "Kbits"
         },
         "overrides": []
       },
@@ -198,6 +202,9 @@
       },
       "id": 18,
       "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -206,21 +213,20 @@
           "fields": "/^MAXUP measurements$/",
           "values": false
         },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true
+        "textMode": "auto"
       },
-      "pluginVersion": "9.4.2",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${DataSource}"
           },
           "groupBy": [],
           "measurement": "measurements",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"kouvas\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"MAXUP\"\n  )",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"MAXUP\"\n  )",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -238,14 +244,14 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${DataSource}"
           },
           "groupBy": [],
           "hide": false,
           "measurement": "measurements",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"kouvas\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"ATTAINABLEUP\"\n  )",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"ATTAINABLEUP\"\n  )",
           "refId": "B",
           "resultFormat": "time_series",
           "select": [
@@ -261,7 +267,7 @@
           "tags": []
         }
       ],
-      "title": "Upstream rate (kbps)",
+      "title": "DSL Sync Up",
       "transformations": [
         {
           "id": "calculateField",
@@ -279,12 +285,12 @@
           }
         }
       ],
-      "type": "gauge"
+      "type": "stat"
     },
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "MHfs--74k"
+        "uid": "${DataSource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -326,24 +332,24 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.2",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${DataSource}"
           },
-          "query": "from(bucket: \"kouvas\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) =>\r\n    r._measurement == \"measurements\" and\r\n    r._field == \"MAXDOWN\"\r\n  )",
+          "query": "from(bucket: \"${Bucket}\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) =>\r\n    r._measurement == \"measurements\" and\r\n    r._field == \"ATTAINABLEDOWN\"\r\n  )",
           "refId": "A"
         }
       ],
-      "title": "Synced downlink(kpbs)",
+      "title": "Attainable Down",
       "type": "stat"
     },
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "MHfs--74k"
+        "uid": "${DataSource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -380,30 +386,27 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^MAXUP$/",
+          "fields": "/^ATTAINABLEUP$/",
           "values": false
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.2",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${DataSource}"
           },
-          "query": "from(bucket: \"kouvas\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) =>\r\n    r._measurement == \"measurements\" and\r\n    r._field == \"MAXUP\"\r\n  )",
+          "query": "from(bucket: \"${Bucket}\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) =>\r\n    r._measurement == \"measurements\" and\r\n    r._field == \"ATTAINABLEUP\"\r\n  )",
           "refId": "A"
         }
       ],
-      "title": "Synced uplink (kbps)",
+      "title": "Attainable Up",
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "MHfs--74k"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -444,25 +447,22 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.2",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${Bucket}"
           },
-          "query": "from(bucket: \"kouvas\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) =>\r\n    r._measurement == \"measurements\" and\r\n    r._field == \"SNRDOWN\"\r\n  )",
+          "query": "from(bucket: \"${Bucket}\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) =>\r\n    r._measurement == \"measurements\" and\r\n    r._field == \"SNRDOWN\"\r\n  )",
           "refId": "A"
         }
       ],
-      "title": "SNR downlink",
+      "title": "SNR Downstream",
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "MHfs--74k"
-      },
+      "datasource": {},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -504,25 +504,22 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.2",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${Bucket}"
           },
-          "query": "from(bucket: \"kouvas\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) =>\r\n    r._measurement == \"measurements\" and\r\n    r._field == \"SNRUP\"\r\n  )",
+          "query": "from(bucket: \"${Bucket}\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) =>\r\n    r._measurement == \"measurements\" and\r\n    r._field == \"SNRUP\"\r\n  )",
           "refId": "A"
         }
       ],
-      "title": "SNR uplink (dB)",
+      "title": "SNR Upstream",
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "MHfs--74k"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -567,14 +564,15 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.2",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${Bucket}"
           },
-          "query": "from(bucket: \"kouvas\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) =>\r\n    r._measurement == \"measurements\" and\r\n    r._field == \"ATTDOWN\"\r\n  )",
+          "hide": false,
+          "query": "from(bucket: \"${Bucket}\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) =>\r\n    r._measurement == \"measurements\" and\r\n    r._field == \"ATTDOWN\"\r\n  )",
           "refId": "A"
         }
       ],
@@ -582,10 +580,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "MHfs--74k"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -630,14 +625,14 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.2",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${Bucket}"
           },
-          "query": "from(bucket: \"kouvas\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) =>\r\n    r._measurement == \"measurements\" and\r\n    r._field == \"ATTUP\"\r\n  )",
+          "query": "from(bucket: \"${Bucket}\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) =>\r\n    r._measurement == \"measurements\" and\r\n    r._field == \"ATTUP\"\r\n  )",
           "refId": "A"
         }
       ],
@@ -645,10 +640,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "MHfs--74k"
-      },
+      "datasource": {},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -746,13 +738,13 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${Bucket}"
           },
           "groupBy": [],
           "measurement": "measurements",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"kouvas\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"MAXDOWN\"\n  )",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"MAXDOWN\"\n  )",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -770,14 +762,14 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${Bucket}"
           },
           "groupBy": [],
           "hide": false,
           "measurement": "measurements",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"kouvas\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"MAXUP\"\n  )",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"MAXUP\"\n  )",
           "refId": "B",
           "resultFormat": "time_series",
           "select": [
@@ -797,10 +789,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "MHfs--74k"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -897,13 +886,13 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${Bucket}"
           },
           "groupBy": [],
           "measurement": "measurements",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"kouvas\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"ATTAINABLEDOWN\"\n  )",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"ATTAINABLEDOWN\"\n  )",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -921,14 +910,14 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${Bucket}"
           },
           "groupBy": [],
           "hide": false,
           "measurement": "measurements",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"kouvas\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"ATTAINABLEUP\"\n  )",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"ATTAINABLEUP\"\n  )",
           "refId": "B",
           "resultFormat": "time_series",
           "select": [
@@ -948,10 +937,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "MHfs--74k"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -963,7 +949,7 @@
             "axisLabel": "FEC",
             "axisPlacement": "auto",
             "barAlignment": 0,
-            "drawStyle": "points",
+            "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
             "hideFrom": {
@@ -971,7 +957,7 @@
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "stepBefore",
+            "lineInterpolation": "stepAfter",
             "lineStyle": {
               "fill": "solid"
             },
@@ -1063,13 +1049,14 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${Bucket}"
           },
           "groupBy": [],
+          "hide": false,
           "measurement": "measurements",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"kouvas\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"FECDOWN\"\n  )",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"FECDOWN\"\n  )",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -1087,14 +1074,14 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${Bucket}"
           },
           "groupBy": [],
           "hide": false,
           "measurement": "measurements",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"kouvas\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"FECUP\"\n  )",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"FECUP\"\n  )",
           "refId": "B",
           "resultFormat": "time_series",
           "select": [
@@ -1114,10 +1101,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "MHfs--74k"
-      },
+      "datasource": {},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1130,7 +1114,7 @@
             "axisLabel": "CRC",
             "axisPlacement": "auto",
             "barAlignment": 0,
-            "drawStyle": "points",
+            "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
             "hideFrom": {
@@ -1215,13 +1199,13 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${Bucket}"
           },
           "groupBy": [],
           "measurement": "measurements",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"kouvas\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"CRCDOWN\"\n  )",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"CRCDOWN\"\n  )",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -1239,14 +1223,14 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${Bucket}"
           },
           "groupBy": [],
           "hide": false,
           "measurement": "measurements",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"kouvas\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"CRCUP\"\n  )",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"CRCUP\"\n  )",
           "refId": "B",
           "resultFormat": "time_series",
           "select": [
@@ -1266,10 +1250,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "MHfs--74k"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1382,13 +1363,13 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${Bucket}"
           },
           "groupBy": [],
           "measurement": "measurements",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"kouvas\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"POWERDOWN\"\n  )",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"POWERDOWN\"\n  )",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -1406,14 +1387,14 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${Bucket}"
           },
           "groupBy": [],
           "hide": false,
           "measurement": "measurements",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"kouvas\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"POWERUP\"\n  )",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"POWERUP\"\n  )",
           "refId": "B",
           "resultFormat": "time_series",
           "select": [
@@ -1433,10 +1414,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "MHfs--74k"
-      },
+      "datasource": {},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1549,13 +1527,13 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${Bucket}"
           },
           "groupBy": [],
           "measurement": "measurements",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"kouvas\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"SNRDOWN\"\n  )",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"SNRDOWN\"\n  )",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -1573,14 +1551,14 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${Bucket}"
           },
           "groupBy": [],
           "hide": false,
           "measurement": "measurements",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"kouvas\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"SNRUP\"\n  )",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"SNRUP\"\n  )",
           "refId": "B",
           "resultFormat": "time_series",
           "select": [
@@ -1600,10 +1578,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "MHfs--74k"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1700,13 +1675,13 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${Bucket}"
           },
           "groupBy": [],
           "measurement": "measurements",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"kouvas\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"ATTDOWN\"\n  )",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"ATTDOWN\"\n  )",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -1724,14 +1699,14 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${Bucket}"
           },
           "groupBy": [],
           "hide": false,
           "measurement": "measurements",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "from(bucket: \"kouvas\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"ATTUP\"\n  )",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"ATTUP\"\n  )",
           "refId": "B",
           "resultFormat": "time_series",
           "select": [
@@ -1751,10 +1726,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "MHfs--74k"
-      },
+      "datasource": {},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1767,8 +1739,8 @@
             "axisGridShow": true,
             "axisLabel": "",
             "axisPlacement": "auto",
-            "fillOpacity": 68,
-            "gradientMode": "hue",
+            "fillOpacity": 100,
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -1787,115 +1759,54 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "dark-red"
               }
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "FECUP"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "FECDOWN"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 6,
         "x": 0,
         "y": 28
       },
       "id": 20,
       "options": {
         "barRadius": 0,
-        "barWidth": 0.91,
-        "fullHighlight": false,
-        "groupWidth": 0.65,
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        },
-        "orientation": "auto",
-        "showValue": "auto",
-        "stacking": "normal",
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        },
-        "xField": "Time",
-        "xTickLabelRotation": 0,
-        "xTickLabelSpacing": 0
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "MHfs--74k"
-          },
-          "query": "from(bucket: \"kouvas\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"measurements\")\n  |> filter(fn: (r) => r[\"_field\"] == \"FECDOWN\" or r[\"_field\"]==\"FECUP\")\n  |> window(every: 1h)\n  |> spread()\n  |> duplicate(column: \"_start\", as: \"_time\")\n  |> window(every: inf)",
-          "refId": "A"
-        }
-      ],
-      "title": "FEC Errors in buckets",
-      "transformations": [],
-      "type": "barchart"
-    },
-    {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "MHfs--74k"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "fillOpacity": 72,
-            "gradientMode": "hue",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineWidth": 0,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 28
-      },
-      "id": 22,
-      "options": {
-        "barRadius": 0,
-        "barWidth": 0.91,
+        "barWidth": 0.57,
         "fullHighlight": false,
         "groupWidth": 0.65,
         "legend": {
@@ -1905,72 +1816,333 @@
           "showLegend": true
         },
         "orientation": "auto",
-        "showValue": "auto",
-        "stacking": "normal",
+        "showValue": "never",
+        "stacking": "none",
         "tooltip": {
           "mode": "single",
           "sort": "none"
         },
+        "xField": "Time",
         "xTickLabelRotation": 0,
-        "xTickLabelSpacing": 0
+        "xTickLabelSpacing": 100
       },
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "MHfs--74k"
+            "uid": "${Bucket}"
           },
-          "query": "from(bucket: \"kouvas\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"measurements\")\n  |> filter(fn: (r) => r[\"_field\"] == \"CRCDOWN\" or r[\"_field\"]==\"CRCUP\")\n  |> window(every: 1h)\n  |> spread()\n  |> duplicate(column: \"_start\", as: \"_time\")\n  |> window(every: inf)",
+          "hide": false,
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"measurements\")\n  |> filter(fn: (r) => r[\"_field\"] == \"FECDOWN\")\n  |> window(every: 1h)\n  |> spread()\n  |> duplicate(column: \"_start\", as: \"_time\")\n  |> window(every: inf)\n",
           "refId": "A"
         }
       ],
-      "title": "CRC Errors in buckets",
+      "title": "Forward Error Correction (FEC) Errors",
       "transformations": [],
       "type": "barchart"
     },
     {
-      "datasource": {
-        "type": "marcusolsson-json-datasource",
-        "uid": "pD1elZoVz"
-      },
-      "description": "IP provided by: https://myip.wtf",
-      "gridPos": {
-        "h": 9,
-        "w": 4,
-        "x": 10,
-        "y": 36
-      },
-      "id": 24,
-      "options": {
-        "code": {
-          "language": "plaintext",
-          "showLineNumbers": false,
-          "showMiniMap": false
+      "datasource": {},
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 100,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 0,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-red"
+              }
+            ]
+          }
         },
-        "content": "## IP address\n\n${fuckingIP}\n\n## Hostname\n${fuckingHostname}\n\n## Location\n${fuckingLocation}\n\n## ISP\n${fuckingISP}",
-        "mode": "markdown"
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CRCDOWN"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
       },
-      "pluginVersion": "9.4.2",
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 6,
+        "y": 28
+      },
+      "id": 36,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.57,
+        "fullHighlight": false,
+        "groupWidth": 0.65,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "Time",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 100
+      },
       "targets": [
         {
-          "cacheDurationSeconds": 300,
           "datasource": {
-            "type": "marcusolsson-json-datasource",
-            "uid": "pD1elZoVz"
+            "type": "influxdb",
+            "uid": "${Bucket}"
           },
-          "fields": [
-            {
-              "jsonPath": ""
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": ""
+          "hide": false,
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"measurements\")\n  |> filter(fn: (r) => r[\"_field\"] == \"CRCDOWN\")\n  |> window(every: 1h)\n  |> spread()\n  |> duplicate(column: \"_start\", as: \"_time\")\n  |> window(every: inf)\n\n",
+          "refId": "A"
         }
       ],
-      "title": "IP data",
-      "type": "text"
+      "title": "Cyclic redundancy check (CRC) Errors",
+      "transformations": [],
+      "type": "barchart"
+    },
+    {
+      "datasource": {},
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 100,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 0,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "FECUP"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 12,
+        "y": 28
+      },
+      "id": 35,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.57,
+        "fullHighlight": false,
+        "groupWidth": 0.65,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "Time",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 100
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${Bucket}"
+          },
+          "hide": false,
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"measurements\")\n  |> filter(fn: (r) => r[\"_field\"] == \"CRCUP\")\n  |> window(every: 1h)\n  |> spread()\n  |> duplicate(column: \"_start\", as: \"_time\")\n  |> window(every: inf)\n\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Cyclic redundancy check (CRC) Errors",
+      "transformations": [],
+      "type": "barchart"
+    },
+    {
+      "datasource": {},
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 100,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 0,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "FECUP"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 18,
+        "y": 28
+      },
+      "id": 34,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.57,
+        "fullHighlight": false,
+        "groupWidth": 0.65,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "Time",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 100
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${Bucket}"
+          },
+          "hide": false,
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"measurements\")\n  |> filter(fn: (r) => r[\"_field\"] == \"FECUP\")\n  |> window(every: 1h)\n  |> spread()\n  |> duplicate(column: \"_start\", as: \"_time\")\n  |> window(every: inf)\n\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Forward Error Correction (FEC) Errors",
+      "transformations": [],
+      "type": "barchart"
     }
   ],
   "refresh": "",
@@ -1983,33 +2155,21 @@
       {
         "current": {
           "selected": false,
-          "text": "89.210.141.24",
-          "value": "89.210.141.24"
+          "text": "modem",
+          "value": "modem"
         },
         "datasource": {
-          "type": "marcusolsson-json-datasource",
-          "uid": "pD1elZoVz"
+          "type": "influxdb",
+          "uid": "${DataSource}"
         },
-        "definition": "$.YourFuckingIPAddress",
-        "description": "My IP Address",
+        "definition": "\tbuckets()",
         "hide": 0,
         "includeAll": false,
-        "label": "",
+        "label": "Bucket",
         "multi": false,
-        "name": "fuckingIP",
+        "name": "Bucket",
         "options": [],
-        "query": {
-          "cacheDurationSeconds": 300,
-          "fields": [
-            {
-              "jsonPath": "$.YourFuckingIPAddress",
-              "type": "string"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "urlPath": "/json"
-        },
+        "query": "\tbuckets()",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -2019,119 +2179,33 @@
       {
         "current": {
           "selected": false,
-          "text": "Thessaloniki, B, Greece",
-          "value": "Thessaloniki, B, Greece"
+          "text": "InfluxDB",
+          "value": "InfluxDB"
         },
-        "datasource": {
-          "type": "marcusolsson-json-datasource",
-          "uid": "pD1elZoVz"
-        },
-        "definition": "$.YourFuckingLocation",
-        "description": "My location according to my IP",
         "hide": 0,
         "includeAll": false,
         "multi": false,
-        "name": "fuckingLocation",
+        "name": "DataSource",
         "options": [],
-        "query": {
-          "cacheDurationSeconds": 300,
-          "fields": [
-            {
-              "jsonPath": "$.YourFuckingLocation",
-              "type": "string"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "urlPath": "/json"
-        },
+        "query": "influxdb",
+        "queryValue": "",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
-      },
-      {
-        "current": {
-          "selected": false,
-          "text": "ppp089210141024.access.hol.gr",
-          "value": "ppp089210141024.access.hol.gr"
-        },
-        "datasource": {
-          "type": "marcusolsson-json-datasource",
-          "uid": "pD1elZoVz"
-        },
-        "definition": "$.YourFuckingHostname",
-        "description": "My Hostname",
-        "hide": 0,
-        "includeAll": false,
-        "multi": false,
-        "name": "fuckingHostname",
-        "options": [],
-        "query": {
-          "body": "",
-          "cacheDurationSeconds": 300,
-          "fields": [
-            {
-              "jsonPath": "$.YourFuckingHostname"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "urlPath": "/json"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
-      },
-      {
-        "current": {
-          "selected": false,
-          "text": "VF GR Fixed",
-          "value": "VF GR Fixed"
-        },
-        "datasource": {
-          "type": "marcusolsson-json-datasource",
-          "uid": "pD1elZoVz"
-        },
-        "definition": "$.YourFuckingISP",
-        "description": "My ISP",
-        "hide": 0,
-        "includeAll": false,
-        "multi": false,
-        "name": "fuckingISP",
-        "options": [],
-        "query": {
-          "cacheDurationSeconds": 300,
-          "fields": [
-            {
-              "jsonPath": "$.YourFuckingISP"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "urlPath": "/json"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
+        "type": "datasource"
       }
     ]
   },
   "time": {
-    "from": "now-7d",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {
     "hidden": false
   },
   "timezone": "",
-  "title": "Modem stats test",
-  "uid": "LAw3_1iRz69",
-  "version": 6,
+  "title": "Modem stats",
+  "uid": "ModemStatsV2",
+  "version": 3,
   "weekStart": ""
 }

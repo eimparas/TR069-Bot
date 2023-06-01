@@ -53,5 +53,4 @@ Project is: Finished , ModemBot working, PfsenseBot is updated to a newer api th
  ![Grafana](https://github.com/finos2/TR069-Bot/blob/main/IMG/DashBoard.png?raw=true)
  
  * Status Discord Message: 
- 
  ![Status](https://github.com/finos2/TR069-Bot/blob/main/IMG/DiscordStatus.png?raw=true)
