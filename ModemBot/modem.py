@@ -36,10 +36,13 @@ class Modem():
         raise NotImplementedError
     
     def showStats(self):
-        print(self.fecUP, self.fecDOWN)
-        print("ATTAINABLE UP %d ATTAINABLE DOWN %d" %(self.attainableUP, self.attainableDOWN))
-        print("SYNC UP: %d SYNC DOWN %d" % (self.syncUP, self.syncDOWN))
-        print("SNRS %f %f\nATT %f %f\nPOWER %f %f" % (self.snrUP, self.snrDOWN, self.attenuationUP, self.attenuationDOWN, self.powerUP, self.powerDOWN))
+        print("Attainable:  UP %-7d    DOWN %-7d" % (self.attainableUP, self.attainableDOWN))
+        print("Sync:        UP %-7d    DOWN %-7d" % (self.syncUP, self.syncDOWN))
+        print("SNR:         UP %-7.2f    DOWN %-7.2f" % (self.snrUP, self.snrDOWN))
+        print("Attenuation: UP %-7.2f    DOWN %-7.2f" % (self.attenuationUP, self.attenuationDOWN))
+        print("Power:       UP %-7.2f    DOWN %-7.2f" % (self.powerUP, self.powerDOWN))
+        print("CRC errors:  UP %-7d    DOWN %-7d" % (self.crcUP, self.crcDOWN))
+        print("FEC errors:  UP %-7d    DOWN %-7d" % (self.fecUP, self.fecDOWN))
     
     
 
