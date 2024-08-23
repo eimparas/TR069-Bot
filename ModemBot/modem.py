@@ -272,7 +272,11 @@ class ZTEh1600(ZTEModem):
                                  "_sessionTOKEN": sessionToken,
                                  "_sessionTOKENByPost": sessionToken}
             response = session.post(f"http://{self.HOST}/?_type=loginData&_tag=login_entry",data=authorizationData).content.decode()
-            if json.loads(response)["login_need_refresh"] : 
+            resp = json.loads(response)
+            if "loginErrMsg" in resp:
+                raise Exception("Failed to log in to ZTE H1600: %s" %
+                                resp["loginErrMsg"])
+            elif "login_need_refresh" in resp and resp["login_need_refresh"]:
                 session.get(f"http://{self.HOST}/")
                 session.get(f"http://{self.HOST}/?_type=menuView&_tag=dslWanStatus&Menu3Location=0&_={int(datetime.now().timestamp()*1000)}")
                 response = session.get(f"http://{self.HOST}/?_type=menuData&_tag=dsl_interface_status_lua.lua&_={int(datetime.now().timestamp()*1000)}").content.decode()
@@ -280,7 +284,8 @@ class ZTEh1600(ZTEModem):
                 self.parseData(dataXML.find("instance"))
                 #print(session.cookies.get_dict()) #for debugging
             else:
-                raise Exception("Could not log in to modem!")
+                raise Exception(("Failed to log in to ZTE H1600, response "
+                                 "was: %s") % response)
 
 
 class OpenWRT(Modem):
