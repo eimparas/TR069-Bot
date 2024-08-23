@@ -263,7 +263,11 @@ class ZTEh1600(ZTEModem):
             num = re.findall("\d+", xml)[0]
             #print(sessionToken, num)
             password = hashlib.sha256((self.PASSWORD+num).encode()).hexdigest()
-            authorizationData = {"action":"login","Username":self.USERNAME,"Password":password, "_sessionTOKEN":sessionToken}
+            authorizationData = {"action": "login",
+                                 "Username": self.USERNAME,
+                                 "Password": password,
+                                 "_sessionTOKEN": sessionToken,
+                                 "_sessionTOKENByPost": sessionToken}
             response = session.post(f"http://{self.HOST}/?_type=loginData&_tag=login_entry",data=authorizationData).content.decode()
             if json.loads(response)["login_need_refresh"] : 
                 session.get(f"http://{self.HOST}/")
