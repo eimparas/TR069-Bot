@@ -36,10 +36,13 @@ class Modem():
         raise NotImplementedError
     
     def showStats(self):
-        print(self.fecUP, self.fecDOWN)
-        print("ATTAINABLE UP %d ATTAINABLE DOWN %d" %(self.attainableUP, self.attainableDOWN))
-        print("SYNC UP: %d SYNC DOWN %d" % (self.syncUP, self.syncDOWN))
-        print("SNRS %f %f\nATT %f %f\nPOWER %f %f" % (self.snrUP, self.snrDOWN, self.attenuationUP, self.attenuationDOWN, self.powerUP, self.powerDOWN))
+        print("Attainable:  UP %-7d    DOWN %-7d" % (self.attainableUP, self.attainableDOWN))
+        print("Sync:        UP %-7d    DOWN %-7d" % (self.syncUP, self.syncDOWN))
+        print("SNR:         UP %-7.2f    DOWN %-7.2f" % (self.snrUP, self.snrDOWN))
+        print("Attenuation: UP %-7.2f    DOWN %-7.2f" % (self.attenuationUP, self.attenuationDOWN))
+        print("Power:       UP %-7.2f    DOWN %-7.2f" % (self.powerUP, self.powerDOWN))
+        print("CRC errors:  UP %-7d    DOWN %-7d" % (self.crcUP, self.crcDOWN))
+        print("FEC errors:  UP %-7d    DOWN %-7d" % (self.fecUP, self.fecDOWN))
     
     
 
@@ -263,9 +266,17 @@ class ZTEh1600(ZTEModem):
             num = re.findall("\d+", xml)[0]
             #print(sessionToken, num)
             password = hashlib.sha256((self.PASSWORD+num).encode()).hexdigest()
-            authorizationData = {"action":"login","Username":self.USERNAME,"Password":password, "_sessionTOKEN":sessionToken}
+            authorizationData = {"action": "login",
+                                 "Username": self.USERNAME,
+                                 "Password": password,
+                                 "_sessionTOKEN": sessionToken,
+                                 "_sessionTOKENByPost": sessionToken}
             response = session.post(f"http://{self.HOST}/?_type=loginData&_tag=login_entry",data=authorizationData).content.decode()
-            if json.loads(response)["login_need_refresh"] : 
+            resp = json.loads(response)
+            if "loginErrMsg" in resp:
+                raise Exception("Failed to log in to ZTE H1600: %s" %
+                                resp["loginErrMsg"])
+            elif "login_need_refresh" in resp and resp["login_need_refresh"]:
                 session.get(f"http://{self.HOST}/")
                 session.get(f"http://{self.HOST}/?_type=menuView&_tag=dslWanStatus&Menu3Location=0&_={int(datetime.now().timestamp()*1000)}")
                 response = session.get(f"http://{self.HOST}/?_type=menuData&_tag=dsl_interface_status_lua.lua&_={int(datetime.now().timestamp()*1000)}").content.decode()
@@ -273,7 +284,8 @@ class ZTEh1600(ZTEModem):
                 self.parseData(dataXML.find("instance"))
                 #print(session.cookies.get_dict()) #for debugging
             else:
-                raise Exception("Could not log in to modem!")
+                raise Exception(("Failed to log in to ZTE H1600, response "
+                                 "was: %s") % response)
 
 
 class OpenWRT(Modem):
