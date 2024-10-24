@@ -32,6 +32,9 @@ class Modem():
     def disconnect(self):
         pass
     
+    def updateLineState(self):
+        pass
+    
     def updateStats(self):
         raise NotImplementedError
     

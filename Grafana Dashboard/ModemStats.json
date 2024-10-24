@@ -25,7 +25,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 1,
+  "id": 8,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -79,6 +79,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -86,9 +87,11 @@
           "fields": "/^MAXDOWN measurements$/",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -162,7 +165,11 @@
       "type": "stat"
     },
     {
-      "datasource": {},
+      "datasource": {
+        "name": "${DataSource}",
+        "type": "influxdb",
+        "uid": "${DataSource}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -206,6 +213,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -213,9 +221,11 @@
           "fields": "/^MAXUP measurements$/",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -323,6 +333,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -330,9 +341,11 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -382,6 +395,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -389,9 +403,11 @@
           "fields": "/^ATTAINABLEUP$/",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -406,7 +422,11 @@
       "type": "stat"
     },
     {
-      "datasource": {},
+      "datasource": {
+        "name": "${DataSource}",
+        "type": "influxdb",
+        "uid": "${DataSource}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -438,6 +458,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -445,14 +466,16 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${Bucket}"
+            "uid": "${DataSource}"
           },
           "query": "from(bucket: \"${Bucket}\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) =>\r\n    r._measurement == \"measurements\" and\r\n    r._field == \"SNRDOWN\"\r\n  )",
           "refId": "A"
@@ -462,7 +485,11 @@
       "type": "stat"
     },
     {
-      "datasource": {},
+      "datasource": {
+        "name": "${DataSource}",
+        "type": "influxdb",
+        "uid": "${DataSource}"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -495,6 +522,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -502,14 +530,16 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${Bucket}"
+            "uid": "${DataSource}"
           },
           "query": "from(bucket: \"${Bucket}\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) =>\r\n    r._measurement == \"measurements\" and\r\n    r._field == \"SNRUP\"\r\n  )",
           "refId": "A"
@@ -519,7 +549,11 @@
       "type": "stat"
     },
     {
-      "datasource": {},
+      "datasource": {
+        "name": "${DataSource}",
+        "type": "influxdb",
+        "uid": "${DataSource}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -555,6 +589,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -562,14 +597,16 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${Bucket}"
+            "uid": "${DataSource}"
           },
           "hide": false,
           "query": "from(bucket: \"${Bucket}\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) =>\r\n    r._measurement == \"measurements\" and\r\n    r._field == \"ATTDOWN\"\r\n  )",
@@ -580,7 +617,11 @@
       "type": "stat"
     },
     {
-      "datasource": {},
+      "datasource": {
+        "name": "${DataSource}",
+        "type": "influxdb",
+        "uid": "${DataSource}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -616,6 +657,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -623,14 +665,16 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${Bucket}"
+            "uid": "${DataSource}"
           },
           "query": "from(bucket: \"${Bucket}\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) =>\r\n    r._measurement == \"measurements\" and\r\n    r._field == \"ATTUP\"\r\n  )",
           "refId": "A"
@@ -640,7 +684,11 @@
       "type": "stat"
     },
     {
-      "datasource": {},
+      "datasource": {
+        "name": "${DataSource}",
+        "type": "influxdb",
+        "uid": "${DataSource}"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -648,11 +696,13 @@
             "mode": "continuous-GrYlRd"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "SYNCED (kbps)",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 15,
             "gradientMode": "none",
@@ -661,6 +711,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "stepBefore",
             "lineWidth": 1,
             "pointSize": 5,
@@ -690,7 +741,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "Kbits"
         },
         "overrides": [
           {
@@ -738,7 +790,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${Bucket}"
+            "uid": "${DataSource}"
           },
           "groupBy": [],
           "measurement": "measurements",
@@ -762,7 +814,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${Bucket}"
+            "uid": "${DataSource}"
           },
           "groupBy": [],
           "hide": false,
@@ -789,18 +841,24 @@
       "type": "timeseries"
     },
     {
-      "datasource": {},
+      "datasource": {
+        "name": "${DataSource}",
+        "type": "influxdb",
+        "uid": "${DataSource}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "continuous-GrYlRd"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "ATTAINABLE (kbps)",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 15,
             "gradientMode": "none",
@@ -809,6 +867,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "stepBefore",
             "lineWidth": 1,
             "pointSize": 5,
@@ -838,7 +897,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "Kbits"
         },
         "overrides": [
           {
@@ -886,7 +946,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${Bucket}"
+            "uid": "${DataSource}"
           },
           "groupBy": [],
           "measurement": "measurements",
@@ -910,7 +970,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${Bucket}"
+            "uid": "${DataSource}"
           },
           "groupBy": [],
           "hide": false,
@@ -937,18 +997,25 @@
       "type": "timeseries"
     },
     {
-      "datasource": {},
+      "datasource": {
+        "name": "${DataSource}",
+        "type": "influxdb",
+        "uid": "${DataSource}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "continuous-GrYlRd",
+            "seriesBy": "last"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
-            "axisLabel": "FEC",
+            "axisLabel": "POWER (dBm)",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -957,6 +1024,506 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
+            "lineInterpolation": "stepBefore",
+            "lineWidth": 1,
+            "pointSize": 7,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "dBm"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "POWERDOWN"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "POWERUP"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 12
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DataSource}"
+          },
+          "groupBy": [],
+          "measurement": "measurements",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"POWERDOWN\"\n  )",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "POWERUP"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DataSource}"
+          },
+          "groupBy": [],
+          "hide": false,
+          "measurement": "measurements",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"POWERUP\"\n  )",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "POWERDOWN"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Power",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "name": "${DataSource}",
+        "type": "influxdb",
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "ATTENUATION (dB)",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "stepBefore",
+            "lineWidth": 1,
+            "pointSize": 7,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "dB"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ATTDOWN"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 12
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DataSource}"
+          },
+          "groupBy": [],
+          "measurement": "measurements",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"ATTDOWN\"\n  )",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "ATTUP"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DataSource}"
+          },
+          "groupBy": [],
+          "hide": false,
+          "measurement": "measurements",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"ATTUP\"\n  )",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "ATTDOWN"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Attenuation",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "name": "${DataSource}",
+        "type": "influxdb",
+        "uid": "${DataSource}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "SNR (dB)",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "stepBefore",
+            "lineWidth": 1,
+            "pointSize": 7,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "dB"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "SNRDOWN"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "SNRUP"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 12
+      },
+      "id": 8,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DataSource}"
+          },
+          "groupBy": [],
+          "measurement": "measurements",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"SNRDOWN\"\n  )",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "SNRUP"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DataSource}"
+          },
+          "groupBy": [],
+          "hide": false,
+          "measurement": "measurements",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"SNRUP\"\n  )",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "SNRDOWN"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "SNR",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "name": "${DataSource}",
+        "type": "influxdb",
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "FEC",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
             "lineInterpolation": "stepAfter",
             "lineStyle": {
               "fill": "solid"
@@ -1028,7 +1595,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 12
+        "y": 20
       },
       "id": 4,
       "options": {
@@ -1049,7 +1616,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${Bucket}"
+            "uid": "${DataSource}"
           },
           "groupBy": [],
           "hide": false,
@@ -1074,7 +1641,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${Bucket}"
+            "uid": "${DataSource}"
           },
           "groupBy": [],
           "hide": false,
@@ -1101,7 +1668,11 @@
       "type": "timeseries"
     },
     {
-      "datasource": {},
+      "datasource": {
+        "name": "${DataSource}",
+        "type": "influxdb",
+        "uid": "${DataSource}"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1109,11 +1680,13 @@
             "mode": "continuous-GrYlRd"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "CRC",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -1122,6 +1695,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "stepBefore",
             "lineStyle": {
               "fill": "solid"
@@ -1178,7 +1752,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 12
+        "y": 20
       },
       "id": 2,
       "options": {
@@ -1199,7 +1773,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${Bucket}"
+            "uid": "${DataSource}"
           },
           "groupBy": [],
           "measurement": "measurements",
@@ -1223,7 +1797,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${Bucket}"
+            "uid": "${DataSource}"
           },
           "groupBy": [],
           "hide": false,
@@ -1250,483 +1824,11 @@
       "type": "timeseries"
     },
     {
-      "datasource": {},
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "continuous-GrYlRd",
-            "seriesBy": "last"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "POWER (dBm)",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "stepBefore",
-            "lineWidth": 1,
-            "pointSize": 7,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "POWERDOWN"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "dark-red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "POWERUP"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "semi-dark-green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+      "datasource": {
+        "name": "${DataSource}",
+        "type": "influxdb",
+        "uid": "${DataSource}"
       },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 0,
-        "y": 20
-      },
-      "id": 6,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "mean",
-            "max",
-            "min"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "${Bucket}"
-          },
-          "groupBy": [],
-          "measurement": "measurements",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"POWERDOWN\"\n  )",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "POWERUP"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "${Bucket}"
-          },
-          "groupBy": [],
-          "hide": false,
-          "measurement": "measurements",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"POWERUP\"\n  )",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "POWERDOWN"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
-      "title": "Power",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {},
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "continuous-GrYlRd"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "SNR (dB)",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "stepBefore",
-            "lineWidth": 1,
-            "pointSize": 7,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "SNRDOWN"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "dark-red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "SNRUP"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "semi-dark-green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 8,
-        "y": 20
-      },
-      "id": 8,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "mean",
-            "max",
-            "min"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "${Bucket}"
-          },
-          "groupBy": [],
-          "measurement": "measurements",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"SNRDOWN\"\n  )",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "SNRUP"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "${Bucket}"
-          },
-          "groupBy": [],
-          "hide": false,
-          "measurement": "measurements",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"SNRUP\"\n  )",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "SNRDOWN"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
-      "title": "SNR",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {},
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "continuous-GrYlRd"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "ATTENUATION (dB)",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "stepBefore",
-            "lineWidth": 1,
-            "pointSize": 7,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "ATTDOWN"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "dark-red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 16,
-        "y": 20
-      },
-      "id": 10,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "mean",
-            "max",
-            "min"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "${Bucket}"
-          },
-          "groupBy": [],
-          "measurement": "measurements",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"ATTDOWN\"\n  )",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "ATTUP"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "${Bucket}"
-          },
-          "groupBy": [],
-          "hide": false,
-          "measurement": "measurements",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"measurements\" and\n    r._field == \"ATTUP\"\n  )",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "ATTDOWN"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
-      "title": "Attenuation",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1734,6 +1836,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisGridShow": true,
@@ -1768,28 +1871,13 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "FECUP"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "semi-dark-red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
               "options": "FECDOWN"
             },
             "properties": [
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "green",
+                  "fixedColor": "semi-dark-red",
                   "mode": "fixed"
                 }
               }
@@ -1830,7 +1918,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${Bucket}"
+            "uid": "${DataSource}"
           },
           "hide": false,
           "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"measurements\")\n  |> filter(fn: (r) => r[\"_field\"] == \"FECDOWN\")\n  |> window(every: 1h)\n  |> spread()\n  |> duplicate(column: \"_start\", as: \"_time\")\n  |> window(every: inf)\n",
@@ -1838,11 +1926,14 @@
         }
       ],
       "title": "Forward Error Correction (FEC) Errors",
-      "transformations": [],
       "type": "barchart"
     },
     {
-      "datasource": {},
+      "datasource": {
+        "name": "${DataSource}",
+        "type": "influxdb",
+        "uid": "${DataSource}"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1850,6 +1941,112 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 100,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 0,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "FECUP"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 6,
+        "y": 28
+      },
+      "id": 34,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.57,
+        "fullHighlight": false,
+        "groupWidth": 0.65,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "Time",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 100
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DataSource}"
+          },
+          "hide": false,
+          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"measurements\")\n  |> filter(fn: (r) => r[\"_field\"] == \"FECUP\")\n  |> window(every: 1h)\n  |> spread()\n  |> duplicate(column: \"_start\", as: \"_time\")\n  |> window(every: inf)\n\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Forward Error Correction (FEC) Errors",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "name": "${DataSource}",
+        "type": "influxdb",
+        "uid": "${DataSource}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisGridShow": true,
@@ -1890,7 +2087,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "green",
+                  "fixedColor": "dark-red",
                   "mode": "fixed"
                 }
               }
@@ -1901,7 +2098,7 @@
       "gridPos": {
         "h": 8,
         "w": 6,
-        "x": 6,
+        "x": 12,
         "y": 28
       },
       "id": 36,
@@ -1931,7 +2128,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${Bucket}"
+            "uid": "${DataSource}"
           },
           "hide": false,
           "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"measurements\")\n  |> filter(fn: (r) => r[\"_field\"] == \"CRCDOWN\")\n  |> window(every: 1h)\n  |> spread()\n  |> duplicate(column: \"_start\", as: \"_time\")\n  |> window(every: inf)\n\n",
@@ -1939,11 +2136,14 @@
         }
       ],
       "title": "Cyclic redundancy check (CRC) Errors",
-      "transformations": [],
       "type": "barchart"
     },
     {
-      "datasource": {},
+      "datasource": {
+        "name": "${DataSource}",
+        "type": "influxdb",
+        "uid": "${DataSource}"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1951,6 +2151,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisGridShow": true,
@@ -2002,7 +2203,7 @@
       "gridPos": {
         "h": 8,
         "w": 6,
-        "x": 12,
+        "x": 18,
         "y": 28
       },
       "id": 35,
@@ -2032,7 +2233,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${Bucket}"
+            "uid": "${DataSource}"
           },
           "hide": false,
           "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"measurements\")\n  |> filter(fn: (r) => r[\"_field\"] == \"CRCUP\")\n  |> window(every: 1h)\n  |> spread()\n  |> duplicate(column: \"_start\", as: \"_time\")\n  |> window(every: inf)\n\n",
@@ -2040,115 +2241,12 @@
         }
       ],
       "title": "Cyclic redundancy check (CRC) Errors",
-      "transformations": [],
-      "type": "barchart"
-    },
-    {
-      "datasource": {},
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisGridShow": true,
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "fillOpacity": 100,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineWidth": 0,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "FECUP"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 18,
-        "y": 28
-      },
-      "id": 34,
-      "options": {
-        "barRadius": 0,
-        "barWidth": 0.57,
-        "fullHighlight": false,
-        "groupWidth": 0.65,
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "orientation": "auto",
-        "showValue": "never",
-        "stacking": "none",
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        },
-        "xField": "Time",
-        "xTickLabelRotation": 0,
-        "xTickLabelSpacing": 100
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "${Bucket}"
-          },
-          "hide": false,
-          "query": "from(bucket: \"${Bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"measurements\")\n  |> filter(fn: (r) => r[\"_field\"] == \"FECUP\")\n  |> window(every: 1h)\n  |> spread()\n  |> duplicate(column: \"_start\", as: \"_time\")\n  |> window(every: inf)\n\n",
-          "refId": "A"
-        }
-      ],
-      "title": "Forward Error Correction (FEC) Errors",
-      "transformations": [],
       "type": "barchart"
     }
   ],
   "refresh": "",
   "revision": 1,
-  "schemaVersion": 38,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": [
@@ -2179,8 +2277,8 @@
       {
         "current": {
           "selected": false,
-          "text": "InfluxDB",
-          "value": "InfluxDB"
+          "text": "influxdbModem",
+          "value": "ce01vtepllddsa"
         },
         "hide": 0,
         "includeAll": false,
@@ -2205,7 +2303,7 @@
   },
   "timezone": "",
   "title": "Modem stats",
-  "uid": "ModemStatsV2",
+  "uid": "ModemStats",
   "version": 3,
   "weekStart": ""
 }

@@ -1,0 +1,10 @@
+[Modem_config]
+Host = ""
+Username = ""
+Password = ""
+CpeModel = "" # use "technicolor, "zteh267a" , "openwrt" to select CPE
+
+[Discord_config]
+Api_key = ""
+Admin_ID = ""
+Channel_ID = ""

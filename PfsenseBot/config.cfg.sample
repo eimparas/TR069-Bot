@@ -1,0 +1,12 @@
+[Pfsense]
+HOST = ""
+PFSENSE_USER_ID = ""
+PFSENSE_API_TOKEN = ""
+
+[Discord]
+CHANNEL_ID = ""
+ADMIN_ID = ""
+BOT_TOKEN = ""
+
+[Remote_Wan]
+WanIP_EP = ""

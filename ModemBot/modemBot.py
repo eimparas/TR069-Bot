@@ -7,7 +7,7 @@ from nextcord.ext import commands, tasks
 from nextcord.ui import View, button, Button
 from datetime import datetime
 
-config_filename = 'config.toml'
+config_filename = 'config.cfg'
 config_data = {
     'Modem_config': {
         'Host': '',

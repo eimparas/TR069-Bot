@@ -6,4 +6,4 @@ COPY pfbotV2.py /PfsenseBot
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get upgrade python3-pip -y
 RUN pip3 install nextcord requests
-CMD ["python3", "pfbotV2.py"]
+CMD ["python3", "PFsenseBot.py"]
