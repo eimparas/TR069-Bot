@@ -1,0 +1,6 @@
+nextcord
+toml
+paramiko
+requests
+beautifulsoup4
+influxdb-client
