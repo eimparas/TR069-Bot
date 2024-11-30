@@ -1,0 +1,16 @@
+[Unit]
+Description=Modem Discord bot
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User={Username}
+Group={Username}
+WorkingDirectory=/bot/TR069-Bot
+ExecStart=/usr/bin/python3 /bot/TR069-Bot/modemBot.py
+
+[Install]
+WantedBy=multi-user.target
