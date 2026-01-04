@@ -3,6 +3,20 @@ import paramiko, re, hashlib, requests, traceback
 from bs4 import BeautifulSoup
 from datetime import datetime
 import json
+from Exscript.protocols import Telnet
+from Exscript import Account
+import logging
+import paramiko.util
+
+
+class CustomFileHandler(logging.StreamHandler):
+    def emit(self, record):
+        record.msg = f"[modem.py] {record.msg}"
+        super().emit(record)
+
+# Proper Logging
+paramiko.util.logging.getLogger("paramiko").setLevel(logging.WARNING)
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s', handlers=[CustomFileHandler()])
 
 class Modem():
 
@@ -32,22 +46,16 @@ class Modem():
     def disconnect(self):
         pass
     
-    def updateLineState(self):
-        pass
-    
     def updateStats(self):
         raise NotImplementedError
     
     def showStats(self):
-        print("Attainable:  UP %-7d    DOWN %-7d" % (self.attainableUP, self.attainableDOWN))
-        print("Sync:        UP %-7d    DOWN %-7d" % (self.syncUP, self.syncDOWN))
-        print("SNR:         UP %-7.2f    DOWN %-7.2f" % (self.snrUP, self.snrDOWN))
-        print("Attenuation: UP %-7.2f    DOWN %-7.2f" % (self.attenuationUP, self.attenuationDOWN))
-        print("Power:       UP %-7.2f    DOWN %-7.2f" % (self.powerUP, self.powerDOWN))
-        print("CRC errors:  UP %-7d    DOWN %-7d" % (self.crcUP, self.crcDOWN))
-        print("FEC errors:  UP %-7d    DOWN %-7d" % (self.fecUP, self.fecDOWN))
-    
-    
+        logging.debug(f"FEC UP: {self.fecUP}, FEC DOWN: {self.fecDOWN}")
+        logging.debug(f"ATTAINABLE UP: {self.attainableUP}, ATTAINABLE DOWN: {self.attainableDOWN}")
+        logging.debug(f"SYNC UP: {self.syncUP}, SYNC DOWN: {self.syncDOWN}")
+        logging.debug(f"SNR UP: {self.snrUP}, SNR DOWN: {self.snrDOWN}")
+        logging.debug(f"ATTENUATION UP: {self.attenuationUP}, ATTENUATION DOWN: {self.attenuationDOWN}")
+        logging.debug(f"POWER UP: {self.powerUP}, POWER DOWN: {self.powerDOWN}")
 
 class TechnicolorModem(Modem):
     def __init__(self, HOST, USERNAME, PASSWORD):
@@ -76,13 +84,13 @@ class TechnicolorModem(Modem):
         }# Transformer Commands
     
     def connect(self):
-        print("SSH CONNECTING " + self.HOST)
+        logging.info(f"SSH CONNECTING to {self.HOST}")
         self.client = paramiko.SSHClient()
         try:
             self.client.load_host_keys("host_key.txt")
             self.client.connect(self.HOST,username=self.USERNAME, password=self.PASSWORD)
         except FileNotFoundError:
-            print("Key file not found, saving current")
+            logging.warning("Key file not found, saving current")
             with open("host_key.txt", "w") as f:
                 pass
             self.client.set_missing_host_key_policy(paramiko.client.AutoAddPolicy())
@@ -119,17 +127,17 @@ class TechnicolorModem(Modem):
             self.fecUP = self.fetchNums(self.getStats("dsl_fec_up"), True)[0]
             self.fecDOWN = self.fetchNums(self.getStats("dsl_fec_down"), True)[0]
         except IndexError as i:
-            print("ERROR: ", i)
+            logging.error(f"IndexError: {i}")
             timestr = datetime.now().strftime("%m-%d-%Y_%H.%M.%S")
             with open(timestr+".txt", "a") as file:
                 file.write(traceback.format_exc()+"\n")
-                print("==============================DATA=================================")
+                logging.error("==============================DATA=================================")
                 file.write("==============================DATA=================================\n")
                 values = self.COMMANDS.keys()
                 for value in values:
-                    print(value, self.getStats(value))
+                    logging.error(f"{value}: {self.getStats(value)}")
                     file.write(value+"\t"+self.getStats(value)+"\n")
-                print("==============================END DATA=============================")
+                logging.error("==============================END DATA=============================")
                 file.write("==============================END DATA============================="+"\n")
 
     def updateLineState(self):
@@ -269,17 +277,13 @@ class ZTEh1600(ZTEModem):
             num = re.findall("\d+", xml)[0]
             #print(sessionToken, num)
             password = hashlib.sha256((self.PASSWORD+num).encode()).hexdigest()
-            authorizationData = {"action": "login",
-                                 "Username": self.USERNAME,
-                                 "Password": password,
-                                 "_sessionTOKEN": sessionToken,
-                                 "_sessionTOKENByPost": sessionToken}
+            authorizationData = {"action":"login","Username":self.USERNAME,"Password":password, "_sessionTOKEN":sessionToken}
             response = session.post(f"http://{self.HOST}/?_type=loginData&_tag=login_entry",data=authorizationData).content.decode()
             resp = json.loads(response)
             if "loginErrMsg" in resp:
                 raise Exception("Failed to log in to ZTE H1600: %s" %
                                 resp["loginErrMsg"])
-            elif "login_need_refresh" in resp and resp["login_need_refresh"]:
+            elif "login_need_refresh" in resp and resp["login_need_refresh"] : 
                 session.get(f"http://{self.HOST}/")
                 session.get(f"http://{self.HOST}/?_type=menuView&_tag=dslWanStatus&Menu3Location=0&_={int(datetime.now().timestamp()*1000)}")
                 response = session.get(f"http://{self.HOST}/?_type=menuData&_tag=dsl_interface_status_lua.lua&_={int(datetime.now().timestamp()*1000)}").content.decode()
@@ -290,98 +294,221 @@ class ZTEh1600(ZTEModem):
                 raise Exception(("Failed to log in to ZTE H1600, response "
                                  "was: %s") % response)
 
-
 class OpenWRT(Modem):
     def __init__(self, HOST, USERNAME, PASSWORD):
         super().__init__()
         self.HOST = HOST
         self.USERNAME = USERNAME
         self.PASSWORD = PASSWORD
-        
-    ## SSH connection stuff
-    def connect(self):
-        print("SSH CONNECTING " + self.HOST)
-        self.client = paramiko.SSHClient()
+        self.sid = "00000000000000000000000000000000"
+
+    def _ubus_rpc(self, payload):
+        url = f"http://{self.HOST}/ubus"
         try:
-            self.client.load_host_keys("host_key.txt")
-            self.client.connect(self.HOST,username=self.USERNAME, password=self.PASSWORD)
-        except FileNotFoundError:
-            print("Key file not found, saving current")
-            with open("host_key.txt", "w") as f:
-                pass
-            self.client.set_missing_host_key_policy(paramiko.client.AutoAddPolicy())
-            self.client.connect(self.HOST,username=self.USERNAME, password=self.PASSWORD)
-            self.client.save_host_keys("host_key.txt")
+            r = requests.post(url, json=payload, timeout=5)
+            r.raise_for_status()
+            return r.json()
+        except Exception as e:
+            logging.error(f"UBUS RPC failed: {e}")
+            raise
+
+    def connect(self):
+        # No persistent connection needed for HTTP API
+        pass
     
     def disconnect(self):
-        if self.client is not None:
-            self.client.close()
+        # No persistent connection needed for HTTP API
+        pass
     
-    def getStats(self, cmd):
-        if self.client is not None:
-            stdin, stdout, stderr = self.client.exec_command("ubus call dsl metrics")
-            return stdout.read().decode('utf-8')
+    def _login(self):
+        payload = {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "call",
+            "params": [
+                "00000000000000000000000000000000",
+                "session",
+                "login",
+                {"username": self.USERNAME, "password": self.PASSWORD}
+            ]
+        }
+        data = self._ubus_rpc(payload)
+        if "result" in data and len(data["result"]) > 1:
+            self.sid = data["result"][1]["ubus_rpc_session"]
+        else:
+            raise Exception("Login failed, could not retrieve session ID")
 
     def updateStats(self):
-        dbusReturn = self.getStats(self)
-        parsed_payload=json.loads(dbusReturn)
-
-        if parsed_payload['power_state']== "L0 - Synchronized":
-            self.isOnline = True
-        else:
-            self.isOnline = False
-        
         try:
-            if parsed_payload['power_state']== "L0 - Synchronized":
+            self._login()
+            
+            payload = {
+                "jsonrpc": "2.0",
+                "id": 2,
+                "method": "call",
+                "params": [
+                    self.sid,
+                    "dsl",
+                    "metrics",
+                    {}
+                ]
+            }
+            
+            resp = self._ubus_rpc(payload)
+            parsed_payload = resp["result"][1]
 
-                self.attainableUP = (parsed_payload['upstream']['attndr'])/1000 #bps to kbps
-                self.attainableDOWN = (parsed_payload['downstream']['attndr'])/1000
-                self.syncUP = (parsed_payload['upstream']['data_rate'])/1000
-                self.syncDOWN = (parsed_payload['downstream']['data_rate'])/1000
-                self.snrUP = (parsed_payload['upstream']['snr'])/1000
-                self.snrDOWN = parsed_payload['downstream']['snr']
-                self.attenuationUP = parsed_payload['upstream']['latn']
-                self.attenuationDOWN = parsed_payload['downstream']['latn']
-                self.powerUP = parsed_payload['upstream']['actatp']
-                self.powerDOWN = parsed_payload['downstream']['actatp']
-                self.crcUP = parsed_payload['errors']['far']['crc_p']
-                self.crcDOWN = parsed_payload['errors']['near']['crc_p']
-                self.fecUP = parsed_payload['errors']['far']['fecs']
-                self.fecDOWN = parsed_payload['errors']['near']['fecs']
-        except IndexError as i:
-            print("ERROR: ", i)
+            if parsed_payload.get('power_state') == "L0 - Synchronized":
+                self.isOnline = True
+                
+                upstream = parsed_payload.get('upstream', {})
+                downstream = parsed_payload.get('downstream', {})
+                errors = parsed_payload.get('errors', {})
+                errors_near = errors.get('near', {})
+                errors_far = errors.get('far', {})
+
+                self.attainableUP = upstream.get('attndr', 0) / 1000
+                self.attainableDOWN = downstream.get('attndr', 0) / 1000
+                self.syncUP = upstream.get('data_rate', 0) / 1000
+                self.syncDOWN = downstream.get('data_rate', 0) / 1000
+                self.snrUP = upstream.get('snr', 0)
+                self.snrDOWN = downstream.get('snr', 0)
+                self.attenuationUP = upstream.get('latn', 0)
+                self.attenuationDOWN = downstream.get('latn', 0)
+                self.powerUP = upstream.get('actatp', 0)
+                self.powerDOWN = downstream.get('actatp', 0)
+                self.crcUP = errors_far.get('crc_p', 0)
+                self.crcDOWN = errors_near.get('crc_p', 0)
+                self.fecUP = errors_far.get('fecs', 0)
+                self.fecDOWN = errors_near.get('fecs', 0)
+            else:
+                self.isOnline = False
+
+        except Exception as e:
+            logging.error(f"Error updating stats: {e}")
+            self.isOnline = False
+            # Optional: Keep the file logging if desired, but simplified
             timestr = datetime.now().strftime("%m-%d-%Y_%H.%M.%S")
-            with open(timestr+".txt", "a") as file:
-                file.write(traceback.format_exc()+"\n")
-                print("==============================DATA=================================")
-                file.write("==============================DATA=================================\n")
-                values = self.COMMANDS.keys()
-                for value in values:
-                    print(value, self.getStats(value))
-                    file.write(value+"\t"+self.getStats(value)+"\n")
-                print("==============================END DATA=============================")
-                file.write("==============================END DATA============================="+"\n")
+            # Minimal error logging to avoid file spam if desired, or keep original logic. 
+            # Sticking to logging to stderr/log file for now as per clean up.
 
     def updateLineState(self):
-        dbusReturn = self.getStats(self)
-        parsed_payload=json.loads(dbusReturn)
-
-        if parsed_payload['power_state']== "L0 - Synchronized":
-            self.isOnline = True
-        else:
-            self.isOnline = False
+        # Reuse updateStats logic or similar lightweight check
+        self.updateStats()
             
     def reboot(self):
-        if self.client is not None:
-            self.client.exec_command("reboot")
+        raise NotImplementedError("Reboot via UBUS not implemented")
     
     def disconnectLine(self):
         raise NotImplementedError
-        if self.client is not None:
-            self.client.exec_command("xdslctl connection --down")
-
+    
     def connectLine(self):
         raise NotImplementedError
-        if self.client is not None:
-            self.client.exec_command("xdslctl connection --up")
 
+class DraytekModem(Modem):
+    def __init__(self, HOST, USERNAME, PASSWORD):
+        super().__init__()
+        self.HOST = HOST
+        self.USERNAME = USERNAME
+        self.PASSWORD = PASSWORD
+        self.client = None
+    
+    def connect(self):
+        logging.info(f"Telnet CONNECTING to {self.HOST}")
+        self.client = Telnet()
+        account = Account(self.USERNAME, self.PASSWORD)
+        try:
+            self.client.set_username_prompt('Account:')
+            self.client.set_password_prompt('Password:')
+            self.client.connect(self.HOST)
+            self.client.login(account)
+        except Exception as e:
+            logging.error(f"Login exception: {e}")
+            self.client = None
+    
+    def disconnect(self):
+        if self.client is not None:
+            self.client.send('exit\n')
+            self.client.close()
+            self.client = None
+
+    def getStats(self):
+        if self.client is not None:
+            try:
+                self.client.execute('vdsl status')
+                status = self.client.response
+                self.client.execute('vdsl status more')
+                statusmore = self.client.response
+                return status, statusmore
+            except Exception as e:
+                logging.error(f"CMD execution exception: {e}")
+                self.disconnect()
+                return None, None
+        return None, None
+
+    def updateStats(self):
+        status, statusmore = self.getStats()
+        if status is None or statusmore is None:
+            return
+        
+        patterns = {
+            "State": r"State\s*:\s*(\w+)",
+            "DS Actual Rate": r"DS Actual Rate\s*:\s*(-?\d+\s*(?:\.\s*\d+)?)\s*bps",
+            "US Actual Rate": r"US Actual Rate\s*:\s*(-?\d+\s*(?:\.\s*\d+)?)\s*bps",
+            "DS Attainable Rate": r"DS Attainable Rate\s*:\s*(-?\d+\s*(?:\.\s*\d+)?)\s*bps",
+            "US Attainable Rate": r"US Attainable Rate\s*:\s*(-?\d+\s*(?:\.\s*\d+)?)\s*bps",
+            "NE Current Attenuation": r"NE Current Attenuation\s*:\s*(-?\d+\s*(?:\.\s*\d+)?)\s*dB",
+            "Cur SNR Margin": r"Cur SNR Margin\s*:\s*(-?\d+\s*(?:\.\s*\d+)?)\s*dB",
+            "Far Current Attenuation": r"Far Current Attenuation\s*:\s*(-?\d+\s*(?:\.\s*\d+)?)\s*dB",
+            "Far SNR Margin": r"Far SNR Margin\s*:\s*(-?\d+\s*(?:\.\s*\d+)?)\s*dB"
+        }
+
+        for line in status.splitlines():
+            for key, pattern in patterns.items():
+                if match := re.search(pattern, line):
+                    if key == "State":
+                        self.isOnline = match.group(1) == "SHOWTIME"
+                    elif key == "DS Actual Rate":
+                        self.syncDOWN = int(match.group(1)) / 1000
+                    elif key == "US Actual Rate":
+                        self.syncUP = int(match.group(1)) / 1000
+                    elif key == "DS Attainable Rate":
+                        self.attainableDOWN = int(match.group(1)) / 1000
+                    elif key == "US Attainable Rate":
+                        self.attainableUP = int(match.group(1)) / 1000
+                    elif key == "NE Current Attenuation":
+                        self.attenuationDOWN = float(match.group(1))
+                    elif key == "Cur SNR Margin":
+                        self.snrDOWN = float(match.group(1))
+                    elif key == "Far Current Attenuation":
+                        self.attenuationUP = float(match.group(1))
+                    elif key == "Far SNR Margin":
+                        self.snrUP = float(match.group(1))
+
+        for line in statusmore.splitlines():
+            if match := re.search(r'\s+FECS\s+:\s+(\d+)\s+(\d+) \(seconds\)', line):
+                self.fecDOWN = int(match.group(1))
+                self.fecUP = int(match.group(2))
+            if match := re.search(r'\s+CRC\s+:\s+(\d+)\s+(\d+)', line):
+                self.crcDOWN = int(match.group(1))
+                self.crcUP = int(match.group(2))
+
+    def updateLineState(self):
+        status, _ = self.getStats()
+        if status is None:
+            return
+        
+        pattern = r"State\s*:\s*(\w+)"
+        for line in status.splitlines():
+            if match := re.search(pattern, line):
+                self.isOnline = match.group(1) == "SHOWTIME"
+                break
+    
+    def reboot(self):
+        if self.client is not None:
+            self.client.execute("sys reboot")
+    
+    def disconnectLine(self):
+        raise NotImplementedError
+    
+    def connectLine(self):
+        raise NotImplementedError

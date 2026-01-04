@@ -1,10 +1,12 @@
+#!/usr/bin/env python3
+
 from influxdb_client import InfluxDBClient
 from influxdb_client.client.write_api import SYNCHRONOUS
-import modem
+from modem import modem
 import toml
 import os
 
-config_filename = 'config.cfg'
+config_filename = os.path.join("Grafana Dashboard", 'config.cfg')
 config_data = {
     'Modem_config': {
         'Host': '',

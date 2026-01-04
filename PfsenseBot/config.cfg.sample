@@ -1,12 +1,24 @@
-[Pfsense]
-HOST = ""
-PFSENSE_USER_ID = ""
-PFSENSE_API_TOKEN = ""
+[bot]
+# Discord Bot Token
+token = "your-discord-bot-token"
+# Channel ID for alerts
+channel_id = 0
+# Admin User ID for mentions
+admin_id = 0
 
-[Discord]
-CHANNEL_ID = ""
-ADMIN_ID = ""
-BOT_TOKEN = ""
+[pfsense]
+# Host IP or FQDN of your pfSense firewall
+host = "router-ip-address"
+# API Credentials
+user = "your-username"
+token = "pfsense-token"
+# Verify SSL Certificates (set to true if you have valid certs)
+verify_ssl = false
 
-[Remote_Wan]
-WanIP_EP = ""
+[ip_services]
+# Services to check public IP (tried in order)
+urls = [
+    "https://api.ipify.org?format=json",
+    "https://myip.wtf/json",
+    "https://ifconfig.me/all.json"
+]

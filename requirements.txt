@@ -4,3 +4,4 @@ paramiko
 requests
 beautifulsoup4
 influxdb-client
+Exscript
